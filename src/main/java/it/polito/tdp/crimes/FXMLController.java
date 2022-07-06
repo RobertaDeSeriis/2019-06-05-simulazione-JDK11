@@ -7,7 +7,9 @@ package it.polito.tdp.crimes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.crimes.model.Adiacenza;
 import it.polito.tdp.crimes.model.Model;
+import it.polito.tdp.crimes.model.vicino;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,13 +27,13 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxAnno"
-    private ComboBox<?> boxAnno; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxMese"
-    private ComboBox<?> boxMese; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxGiorno"
-    private ComboBox<?> boxGiorno; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxGiorno; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnCreaReteCittadina"
     private Button btnCreaReteCittadina; // Value injected by FXMLLoader
@@ -47,7 +49,23 @@ public class FXMLController {
 
     @FXML
     void doCreaReteCittadina(ActionEvent event) {
-
+    	txtResult.clear();
+    	if(this.boxAnno.getValue()!= null) {
+    		txtResult.appendText(model.creaGrafo(this.boxAnno.getValue()));
+  
+    		this.boxMese.setDisable(false);
+        	this.boxGiorno.setDisable(false);
+        	this.btnSimula.setDisable(false);
+        	
+        	for (Adiacenza a: model.getVertici(this.boxAnno.getValue())) {
+    			for (vicino v: model.getVicini(a)) {
+    				txtResult.appendText("\n"+a+v);
+    			}
+    		}
+    	}
+    	else {
+    		txtResult.appendText("Selezionare l'anno correttamente ...");
+    	}
     }
 
     @FXML
@@ -69,5 +87,9 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.boxAnno.getItems().addAll(model.getAnno()); 
+    	this.boxMese.setDisable(true);
+    	this.boxGiorno.setDisable(true);
+    	this.btnSimula.setDisable(true);
     }
 }
