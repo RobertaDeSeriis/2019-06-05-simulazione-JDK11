@@ -78,6 +78,11 @@ public class Model {
 	public List<Adiacenza> getVertici(Integer a){
 		return dao.getVertici(a); 
 	}
-	
+
+	public int simula(Integer anno, Integer mese, Integer giorno, Integer N) {
+		Simulator sim = new Simulator();
+		//sim.init(N, anno, mese, giorno, grafo);
+		return sim.run();
+	}
 	
 }
